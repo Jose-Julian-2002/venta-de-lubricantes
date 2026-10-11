@@ -5,39 +5,44 @@
 @section('content')
     <div class="mx-auto max-w-6xl">
         <div class="mb-7">
-            <p class="text-sm font-medium text-blue-700">Administración y seguridad</p>
             <h1 class="mt-1 text-2xl font-semibold tracking-tight">Hola, {{ auth()->user()->nombre }}</h1>
-            <p class="mt-2 text-sm text-slate-600">Accede directamente a las tareas que tienes autorizadas.</p>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Accede directamente a las tareas que tienes autorizadas.</p>
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2">
             @can('roles.ver')
-                <a href="{{ route('admin.roles.index') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-blue-300 hover:shadow-md">
-                    <div class="flex items-start justify-between gap-4">
+                <a href="{{ route('admin.roles.index') }}" class="group flex min-h-28 items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-800">
+                    <div class="flex items-center gap-4">
+                        <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                            <x-icon name="shield" class="size-5" />
+                        </span>
                         <div>
-                            <h2 class="font-semibold group-hover:text-blue-700">Roles y permisos</h2>
-                            <p class="mt-2 text-sm leading-6 text-slate-600">Administra perfiles y el acceso asignado a cada uno.</p>
+                            <h2 class="font-semibold group-hover:text-blue-700 dark:group-hover:text-blue-300">Roles y permisos</h2>
+                            <p class="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-400">Administra perfiles y su acceso.</p>
                         </div>
-                        <span aria-hidden="true" class="text-xl text-blue-700">→</span>
                     </div>
+                    <x-icon name="arrow-right" class="size-5 shrink-0 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-blue-700 dark:text-slate-500 dark:group-hover:text-blue-300" />
                 </a>
             @endcan
             @can('usuarios.ver')
-                <a href="{{ route('admin.usuarios.index') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-blue-300 hover:shadow-md">
-                    <div class="flex items-start justify-between gap-4">
+                <a href="{{ route('admin.usuarios.index') }}" class="group flex min-h-28 items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-800">
+                    <div class="flex items-center gap-4">
+                        <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                            <x-icon name="users" class="size-5" />
+                        </span>
                         <div>
-                            <h2 class="font-semibold group-hover:text-blue-700">Usuarios</h2>
-                            <p class="mt-2 text-sm leading-6 text-slate-600">Crea cuentas, asigna un rol y controla su estado.</p>
+                            <h2 class="font-semibold group-hover:text-blue-700 dark:group-hover:text-blue-300">Usuarios</h2>
+                            <p class="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-400">Administra cuentas, roles y estado.</p>
                         </div>
-                        <span aria-hidden="true" class="text-xl text-blue-700">→</span>
                     </div>
+                    <x-icon name="arrow-right" class="size-5 shrink-0 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-blue-700 dark:text-slate-500 dark:group-hover:text-blue-300" />
                 </a>
             @endcan
         </div>
 
         @cannot('roles.ver')
             @cannot('usuarios.ver')
-                <p class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                <p class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/50 dark:text-amber-200">
                     Tu rol aún no tiene permisos de administración asignados.
                 </p>
             @endcannot

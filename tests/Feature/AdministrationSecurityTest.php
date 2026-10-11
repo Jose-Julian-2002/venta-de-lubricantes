@@ -84,7 +84,11 @@ class AdministrationSecurityTest extends TestCase
 
     public function test_login_page_renders(): void
     {
-        $this->get(route('login'))->assertOk()->assertSee('Iniciar sesión');
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSee('Iniciar sesión')
+            ->assertSee('data-theme-toggle', false)
+            ->assertSee('<svg', false);
     }
 
     public function test_permitted_role_and_user_forms_render(): void
@@ -103,7 +107,9 @@ class AdministrationSecurityTest extends TestCase
         $this->actingAs($administrador)
             ->get(route('admin.roles.create'))
             ->assertOk()
-            ->assertSee('Permisos');
+            ->assertSee('Permisos')
+            ->assertSee('data-theme-toggle', false)
+            ->assertSee('<svg', false);
         $this->get(route('admin.roles.edit', $rol))->assertOk()->assertSee('Editar rol');
         $this->get(route('admin.usuarios.index'))->assertOk()->assertSee($usuario->email);
         $this->get(route('admin.usuarios.create'))->assertOk()->assertSee('Crear usuario');
