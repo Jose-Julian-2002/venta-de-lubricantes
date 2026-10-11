@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\ProductoController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\VentaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -60,6 +62,12 @@ Route::middleware(['auth', 'usuario.activo'])->group(function (): void {
             ->only(['index', 'create', 'store', 'show'])->parameters(['compras' => 'compra'])
             ->middlewareFor(['index', 'show'], 'can:compras.ver')
             ->middlewareFor(['create', 'store'], 'can:compras.crear');
+        Route::resource('ventas', VentaController::class)
+            ->only(['index', 'create', 'store', 'show'])->parameters(['ventas' => 'venta'])
+            ->middlewareFor('index', 'can:ventas.ver')
+            ->middlewareFor(['create', 'store'], 'can:ventas.crear')
+            ->middlewareFor('show', 'can:ventas.ticket,venta');
+        Route::post('/clientes', [ClienteController::class, 'store'])->middleware('can:ventas.crear')->name('clientes.store');
         Route::get('/stock', [StockController::class, 'index'])->middleware('can:stock.ver')->name('stock.index');
         Route::get('/stock/{producto}/kardex', [StockController::class, 'kardex'])->middleware('can:stock.ver')->name('stock.kardex');
 

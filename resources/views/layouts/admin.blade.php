@@ -39,13 +39,16 @@
                 </a>
             @endcan
 
-            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos', 'proveedores' => 'Proveedores', 'compras' => 'Compras', 'stock' => 'Stock y Kardex'] as $catalogRoute => $catalogLabel)
+            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos', 'proveedores' => 'Proveedores', 'compras' => 'Compras', 'stock' => 'Stock y Kardex', 'ventas' => 'Historial de ventas'] as $catalogRoute => $catalogLabel)
                 @can($catalogRoute.'.ver')
                     <a href="{{ route('admin.'.$catalogRoute.'.index') }}" @if(request()->routeIs('admin.'.$catalogRoute.'.*')) aria-current="page" @endif class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400">
                         <x-icon name="grid" class="size-4" /> {{ $catalogLabel }}
                     </a>
                 @endcan
             @endforeach
+            @can('ventas.crear')
+                <a href="{{ route('admin.ventas.create') }}" class="flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400"><x-icon name="plus" class="size-4" /> Punto de venta</a>
+            @endcan
             @can('compras.crear')
                 @cannot('compras.ver')
                     <a href="{{ route('admin.compras.create') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400"><x-icon name="plus" class="size-4" /> Registrar compra</a>
@@ -80,13 +83,16 @@
                             </a>
                         @endcan
 
-            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos', 'proveedores' => 'Proveedores', 'compras' => 'Compras', 'stock' => 'Stock y Kardex'] as $catalogRoute => $catalogLabel)
+            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos', 'proveedores' => 'Proveedores', 'compras' => 'Compras', 'stock' => 'Stock y Kardex', 'ventas' => 'Historial de ventas'] as $catalogRoute => $catalogLabel)
                 @can($catalogRoute.'.ver')
                     <a href="{{ route('admin.'.$catalogRoute.'.index') }}" @if(request()->routeIs('admin.'.$catalogRoute.'.*')) aria-current="page" @endif class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400">
                         <x-icon name="grid" class="size-4" /> {{ $catalogLabel }}
                     </a>
                 @endcan
             @endforeach
+            @can('ventas.crear')
+                <a href="{{ route('admin.ventas.create') }}" class="flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400"><x-icon name="plus" class="size-4" /> Punto de venta</a>
+            @endcan
             @can('compras.crear')
                 @cannot('compras.ver')
                     <a href="{{ route('admin.compras.create') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400"><x-icon name="plus" class="size-4" /> Registrar compra</a>

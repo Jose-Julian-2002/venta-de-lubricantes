@@ -16,7 +16,7 @@ class StockMovimiento extends Model
 
     protected $table = 'stock_movimientos';
 
-    protected $fillable = ['producto_id', 'usuario_id', 'compra_detalle_id', 'tipo', 'cantidad', 'stock_anterior', 'stock_nuevo', 'motivo', 'created_at'];
+    protected $fillable = ['producto_id', 'usuario_id', 'compra_detalle_id', 'venta_detalle_id', 'tipo', 'cantidad', 'stock_anterior', 'stock_nuevo', 'motivo', 'created_at'];
 
     protected function casts(): array
     {
@@ -31,6 +31,11 @@ class StockMovimiento extends Model
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(Usuario::class, 'usuario_id');
+    }
+
+    public function ventaDetalle(): BelongsTo
+    {
+        return $this->belongsTo(VentaDetalle::class, 'venta_detalle_id');
     }
 
     public function compraDetalle(): BelongsTo

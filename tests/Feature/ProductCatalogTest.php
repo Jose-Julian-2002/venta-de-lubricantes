@@ -225,6 +225,20 @@ class ProductCatalogTest extends TestCase
             ->assertSee('sin repetir la marca');
     }
 
+    public function test_product_box_factor_is_not_a_catalog_field(): void
+    {
+        $this->signIn();
+        $data = $this->productData();
+        $this->post(route('admin.productos.store'), $data)->assertSessionHasNoErrors();
+        $producto = Producto::query()->firstOrFail();
+        $this->assertFalse(Schema::hasColumn('productos', 'unidades_por_caja'));
+        $this->get(route('admin.productos.create'))->assertOk()->assertDontSee('name="unidades_por_caja"', false);
+        $this->get(route('admin.productos.edit', $producto))->assertOk()->assertDontSee('name="unidades_por_caja"', false);
+        $this->post(route('admin.productos.store'), [...$data, 'unidades_por_caja' => 12])->assertSessionHasErrors('unidades_por_caja');
+        $this->put(route('admin.productos.update', $producto), [...$data, 'unidades_por_caja' => 12])->assertSessionHasErrors('unidades_por_caja');
+        $this->assertDatabaseCount('productos', 1);
+    }
+
     /** @return array<string, array{string}> */
     public static function namesRepeatingBrand(): array
     {

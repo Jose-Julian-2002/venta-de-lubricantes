@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Producto extends Model
 {
@@ -34,9 +35,19 @@ class Producto extends Model
         return $this->belongsTo(Marca::class, 'marca_id');
     }
 
+    public function ultimaCompraDetalle(): HasOne
+    {
+        return $this->hasOne(CompraDetalle::class, 'producto_id')->latestOfMany();
+    }
+
     public function compraDetalles(): HasMany
     {
         return $this->hasMany(CompraDetalle::class, 'producto_id');
+    }
+
+    public function ventaDetalles(): HasMany
+    {
+        return $this->hasMany(VentaDetalle::class, 'producto_id');
     }
 
     public function stockMovimientos(): HasMany

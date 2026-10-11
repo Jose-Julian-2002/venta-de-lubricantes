@@ -28,6 +28,8 @@ return [
         'proveedores.eliminar' => 'Eliminar proveedores',
         'compras.ver' => 'Ver historial de compras',
         'compras.crear' => 'Registrar compras',
+        'ventas.ver' => 'Ver historial de ventas',
+        'ventas.crear' => 'Cobrar ventas en el POS',
         'stock.ver' => 'Consultar stock y Kardex',
     ],
 ];

@@ -28,6 +28,6 @@ class StockService
 
     public function movements(Producto $producto): LengthAwarePaginator
     {
-        return $producto->stockMovimientos()->with(['usuario', 'compraDetalle.compra'])->orderByDesc('id')->paginate(20);
+        return $producto->stockMovimientos()->with(['usuario', 'compraDetalle.compra', 'ventaDetalle.venta'])->orderByDesc('id')->paginate(20);
     }
 }

@@ -14,7 +14,7 @@
                     <tr>
                         <td class="px-4 py-4">{{ $movimiento->created_at->format('d/m/Y H:i') }}</td>
                         <td class="px-4 py-4">{{ $movimiento->tipo === 'entrada' ? 'Entrada' : 'Salida' }}</td>
-                        <td class="px-4 py-4">{{ $movimiento->motivo === 'compra' ? 'Compra' : $movimiento->motivo }}</td>
+                        <td class="px-4 py-4">{{ match ($movimiento->motivo) { 'compra' => 'Compra', 'venta' => 'Venta', default => $movimiento->motivo } }}</td>
                         <td class="px-4 py-4 tabular-nums">{{ $movimiento->cantidad }}</td>
                         <td class="px-4 py-4 tabular-nums">{{ $movimiento->stock_anterior }}</td>
                         <td class="px-4 py-4 tabular-nums">{{ $movimiento->stock_nuevo }}</td>
@@ -25,6 +25,12 @@
                                     <a href="{{ route('admin.compras.show', $movimiento->compraDetalle->compra_id) }}" class="text-blue-700 dark:text-blue-300">Compra #{{ $movimiento->compraDetalle->compra_id }}</a>
                                 @else
                                     Compra #{{ $movimiento->compraDetalle->compra_id }}
+                                @endcan
+                            @elseif ($movimiento->ventaDetalle)
+                                @can('ventas.ticket', $movimiento->ventaDetalle->venta)
+                                    <a href="{{ route('admin.ventas.show', $movimiento->ventaDetalle->venta_id) }}" class="text-blue-700 dark:text-blue-300">Venta #{{ $movimiento->ventaDetalle->venta_id }}</a>
+                                @else
+                                    Venta #{{ $movimiento->ventaDetalle->venta_id }}
                                 @endcan
                             @else — @endif
                         </td>

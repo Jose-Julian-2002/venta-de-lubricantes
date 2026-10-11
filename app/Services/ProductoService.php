@@ -56,7 +56,7 @@ class ProductoService
             if ($locked->stock_actual > 0) {
                 throw ValidationException::withMessages(['nombre' => 'No se puede eliminar un producto con stock. Puedes desactivarlo.']);
             }
-            if ($locked->compraDetalles()->exists() || $locked->stockMovimientos()->exists()) {
+            if ($locked->compraDetalles()->exists() || $locked->ventaDetalles()->exists() || $locked->stockMovimientos()->exists()) {
                 throw ValidationException::withMessages(['nombre' => 'No se puede eliminar un producto con historial de inventario. Puedes desactivarlo.']);
             }
             $locked->delete();

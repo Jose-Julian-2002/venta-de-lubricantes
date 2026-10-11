@@ -23,6 +23,7 @@ class UpdateProductoRequest extends FormRequest
             'precio_venta_menor' => ['nullable', 'numeric', 'min:0', 'max:99999999.99', 'decimal:0,2'],
             'precio_venta_mayor' => ['nullable', 'numeric', 'min:0', 'max:99999999.99', 'decimal:0,2'],
             'estado' => ['required', 'boolean'],
+            'unidades_por_caja' => ['prohibited'],
             'stock_actual' => ['prohibited'],
         ];
     }
@@ -54,6 +55,7 @@ class UpdateProductoRequest extends FormRequest
     {
         return [
             'required' => 'El campo :attribute es obligatorio.',
+            'unidades_por_caja.prohibited' => 'Las unidades por caja se registran en el detalle de compra.',
             'string' => 'El campo :attribute debe ser un texto.',
             'nombre.max' => 'El nombre es demasiado largo.',
             'nombre.unique' => 'Este nombre ya está registrado.',
@@ -71,6 +73,6 @@ class UpdateProductoRequest extends FormRequest
     /** @return array<string, string> */
     public function attributes(): array
     {
-        return ['categoria_id' => 'categoría', 'marca_id' => 'marca', 'precio_venta_menor' => 'precio de venta menor', 'precio_venta_mayor' => 'precio de venta mayor', 'stock_actual' => 'stock'];
+        return ['unidades_por_caja' => 'unidades por caja', 'categoria_id' => 'categoría', 'marca_id' => 'marca', 'precio_venta_menor' => 'precio de venta menor', 'precio_venta_mayor' => 'precio de venta mayor', 'stock_actual' => 'stock'];
     }
 }
