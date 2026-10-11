@@ -40,6 +40,6 @@ class StoreMarcaRequest extends FormRequest
     /** @return array<string, string> */
     public function attributes(): array
     {
-        return ['categoria_id' => 'categoría', 'marca_id' => 'marca', 'precio_compra_referencia' => 'precio de compra de referencia', 'precio_venta_menor' => 'precio de venta menor', 'precio_venta_mayor' => 'precio de venta mayor', 'stock_actual' => 'stock'];
+        return ['categoria_id' => 'categoría', 'marca_id' => 'marca', 'precio_venta_menor' => 'precio de venta menor', 'precio_venta_mayor' => 'precio de venta mayor', 'stock_actual' => 'stock'];
     }
 }

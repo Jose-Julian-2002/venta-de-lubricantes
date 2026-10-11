@@ -3,6 +3,9 @@
 @section('title', 'Usuarios')
 
 @section('content')
+    @error('usuario')
+        <p role="alert" class="mb-4 text-sm text-rose-700 dark:text-rose-300">{{ $message }}</p>
+    @enderror
     <div class="mx-auto max-w-6xl">
         <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>

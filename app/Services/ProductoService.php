@@ -35,13 +35,13 @@ class ProductoService
         return $producto;
     }
 
-    /** @param array{categoria_id: int|string, marca_id: int|string, nombre: string, precio_compra_referencia: string|int|float, precio_venta_menor: string|int|float, precio_venta_mayor: string|int|float, estado: bool|int|string} $data */
+    /** @param array{categoria_id: int|string, marca_id: int|string, nombre: string, precio_venta_menor?: string|int|float|null, precio_venta_mayor?: string|int|float|null, estado: bool|int|string} $data */
     public function create(array $data): Producto
     {
         return Producto::query()->create($data);
     }
 
-    /** @param array{categoria_id: int|string, marca_id: int|string, nombre: string, precio_compra_referencia: string|int|float, precio_venta_menor: string|int|float, precio_venta_mayor: string|int|float, estado: bool|int|string} $data */
+    /** @param array{categoria_id: int|string, marca_id: int|string, nombre: string, precio_venta_menor?: string|int|float|null, precio_venta_mayor?: string|int|float|null, estado: bool|int|string} $data */
     public function update(Producto $producto, array $data): Producto
     {
         $producto->update($data);
@@ -55,6 +55,9 @@ class ProductoService
             $locked = Producto::query()->whereKey($producto->getKey())->lockForUpdate()->firstOrFail();
             if ($locked->stock_actual > 0) {
                 throw ValidationException::withMessages(['nombre' => 'No se puede eliminar un producto con stock. Puedes desactivarlo.']);
+            }
+            if ($locked->compraDetalles()->exists() || $locked->stockMovimientos()->exists()) {
+                throw ValidationException::withMessages(['nombre' => 'No se puede eliminar un producto con historial de inventario. Puedes desactivarlo.']);
             }
             $locked->delete();
         });

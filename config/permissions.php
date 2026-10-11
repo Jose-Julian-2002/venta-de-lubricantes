@@ -22,5 +22,12 @@ return [
         'productos.crear' => 'Crear productos',
         'productos.editar' => 'Editar productos',
         'productos.eliminar' => 'Eliminar productos',
+        'proveedores.ver' => 'Ver proveedores',
+        'proveedores.crear' => 'Crear proveedores',
+        'proveedores.editar' => 'Editar proveedores',
+        'proveedores.eliminar' => 'Eliminar proveedores',
+        'compras.ver' => 'Ver historial de compras',
+        'compras.crear' => 'Registrar compras',
+        'stock.ver' => 'Consultar stock y Kardex',
     ],
 ];

@@ -56,11 +56,10 @@ Gestiona las categorías, marcas y el inventario centralizado en unidades base.
   * `id` (INT, PK)
   * `categoria_id` (INT, **FK** $\to$ `categorias.id`)
   * `marca_id` (INT, **FK** $\to$ `marcas.id`)
-  * `nombre` (VARCHAR 150) — *Ej: Castrol 20w50 1L*
+  * `nombre` (VARCHAR 150) — *Ej: edge 5W-30 1L, sin repetir la marca*
   * `stock_actual` (INT, Default: 0) — *Gestionado estrictamente en unidades sueltas.*
-  * `precio_compra_referencia` (DECIMAL 10,2)
-  * `precio_venta_menor` (DECIMAL 10,2) — *Precio por unidad suelta.*
-  * `precio_venta_mayor` (DECIMAL 10,2) — *Precio por volumen o caja.*
+  * `precio_venta_menor` (DECIMAL 10,2) — *Precio por unidad suelta, nullable: puede registrarse sin precio inicial.*
+  * `precio_venta_mayor` (DECIMAL 10,2) — *Precio por volumen o caja, nullable: puede registrarse sin precio inicial.*
   * `estado` (TINYINT: 1 = Activo, 0 = Inactivo)
 
 ---
@@ -71,16 +70,15 @@ Gestiona el ingreso de mercadería mediante compras por cajas y factores dinámi
 * **`proveedores`**
   * `id` (INT, PK)
   * `nombre_empresa` (VARCHAR 150)
-  * `contacto` (VARCHAR 100)
-  * `telefono` (VARCHAR 30)
-  * `nit_ci` (VARCHAR 50)
+  * `nombre` (VARCHAR 150)
+  * `telefono` (VARCHAR 20)
+  * `nit_ci` (VARCHAR 20)
   * `direccion` (TEXT)
 
 * **`compras` (Cabecera)**
   * `id` (INT, PK)
   * `proveedor_id` (INT, **FK** $\to$ `proveedores.id`)
   * `usuario_id` (INT, **FK** $\to$ `usuarios.id`)
-  * `numero_factura` (VARCHAR 100)
   * `total` (DECIMAL 10,2)
   * `fecha_compra` (DATETIME)
 

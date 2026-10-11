@@ -64,6 +64,12 @@ class UsuarioService
             ]);
         }
 
-        DB::transaction(fn (): bool => $usuario->delete());
+        DB::transaction(function () use ($usuario): void {
+            $locked = Usuario::query()->whereKey($usuario->getKey())->lockForUpdate()->firstOrFail();
+            if ($locked->compras()->exists() || $locked->stockMovimientos()->exists()) {
+                throw ValidationException::withMessages(['usuario' => 'No se puede eliminar un usuario con compras o movimientos registrados. Puedes desactivarlo.']);
+            }
+            $locked->delete();
+        });
     }
 }

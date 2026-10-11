@@ -7,6 +7,7 @@
     <title>@yield('title', 'Administración') | {{ config('app.name', 'POS Lubricantes') }}</title>
     @include('partials.theme-init')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100">
 <div class="min-h-screen md:flex">
@@ -38,13 +39,18 @@
                 </a>
             @endcan
 
-            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos'] as $catalogRoute => $catalogLabel)
+            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos', 'proveedores' => 'Proveedores', 'compras' => 'Compras', 'stock' => 'Stock y Kardex'] as $catalogRoute => $catalogLabel)
                 @can($catalogRoute.'.ver')
                     <a href="{{ route('admin.'.$catalogRoute.'.index') }}" @if(request()->routeIs('admin.'.$catalogRoute.'.*')) aria-current="page" @endif class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400">
                         <x-icon name="grid" class="size-4" /> {{ $catalogLabel }}
                     </a>
                 @endcan
             @endforeach
+            @can('compras.crear')
+                @cannot('compras.ver')
+                    <a href="{{ route('admin.compras.create') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400"><x-icon name="plus" class="size-4" /> Registrar compra</a>
+                @endcannot
+            @endcan
 </nav>
         <div class="border-t border-white/10 px-6 py-4 text-xs text-slate-400">
             Sesión: {{ auth()->user()->nombre }}
@@ -74,13 +80,18 @@
                             </a>
                         @endcan
 
-            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos'] as $catalogRoute => $catalogLabel)
+            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos', 'proveedores' => 'Proveedores', 'compras' => 'Compras', 'stock' => 'Stock y Kardex'] as $catalogRoute => $catalogLabel)
                 @can($catalogRoute.'.ver')
                     <a href="{{ route('admin.'.$catalogRoute.'.index') }}" @if(request()->routeIs('admin.'.$catalogRoute.'.*')) aria-current="page" @endif class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400">
                         <x-icon name="grid" class="size-4" /> {{ $catalogLabel }}
                     </a>
                 @endcan
             @endforeach
+            @can('compras.crear')
+                @cannot('compras.ver')
+                    <a href="{{ route('admin.compras.create') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400"><x-icon name="plus" class="size-4" /> Registrar compra</a>
+                @endcannot
+            @endcan
 </nav>
                 </details>
                 <div class="min-w-0 flex-1">
@@ -123,5 +134,6 @@
         </main>
     </div>
 </div>
+@livewireScripts
 </body>
 </html>

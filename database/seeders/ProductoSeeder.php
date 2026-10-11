@@ -13,13 +13,12 @@ class ProductoSeeder extends Seeder
     {
         $this->call([CategoriaSeeder::class, MarcaSeeder::class]);
         Producto::query()->firstOrCreate([
-            'nombre' => 'Castrol 20w50 1L',
+            'nombre' => 'edge 5W-30 1L',
             'categoria_id' => Categoria::query()->where('nombre', 'Aceites de auto')->firstOrFail()->id,
             'marca_id' => Marca::query()->where('nombre', 'Castrol')->firstOrFail()->id,
         ], [
-            'precio_compra_referencia' => '0.00',
-            'precio_venta_menor' => '0.00',
-            'precio_venta_mayor' => '0.00',
+            'precio_venta_menor' => null,
+            'precio_venta_mayor' => null,
             'estado' => false,
         ]);
     }

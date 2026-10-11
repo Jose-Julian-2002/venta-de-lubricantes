@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\UsuarioFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -37,5 +38,15 @@ class Usuario extends Authenticatable
     public function hasPermission(string $permission): bool
     {
         return $this->rol->permisos->contains('nombre', $permission);
+    }
+
+    public function compras(): HasMany
+    {
+        return $this->hasMany(Compra::class, 'usuario_id');
+    }
+
+    public function stockMovimientos(): HasMany
+    {
+        return $this->hasMany(StockMovimiento::class, 'usuario_id');
     }
 }

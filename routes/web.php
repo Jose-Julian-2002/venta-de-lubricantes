@@ -3,9 +3,12 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\CompraController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +49,19 @@ Route::middleware(['auth', 'usuario.activo'])->group(function (): void {
             ->middlewareFor(['create', 'store'], 'can:productos.crear')
             ->middlewareFor(['edit', 'update'], 'can:productos.editar')
             ->middlewareFor('destroy', 'can:productos.eliminar');
+
+        Route::resource('proveedores', ProveedorController::class)
+            ->except('show')->parameters(['proveedores' => 'proveedor'])
+            ->middlewareFor('index', 'can:proveedores.ver')
+            ->middlewareFor(['create', 'store'], 'can:proveedores.crear')
+            ->middlewareFor(['edit', 'update'], 'can:proveedores.editar')
+            ->middlewareFor('destroy', 'can:proveedores.eliminar');
+        Route::resource('compras', CompraController::class)
+            ->only(['index', 'create', 'store', 'show'])->parameters(['compras' => 'compra'])
+            ->middlewareFor(['index', 'show'], 'can:compras.ver')
+            ->middlewareFor(['create', 'store'], 'can:compras.crear');
+        Route::get('/stock', [StockController::class, 'index'])->middleware('can:stock.ver')->name('stock.index');
+        Route::get('/stock/{producto}/kardex', [StockController::class, 'kardex'])->middleware('can:stock.ver')->name('stock.kardex');
 
         Route::get('/roles', [RolController::class, 'index'])
             ->middleware('can:roles.ver')

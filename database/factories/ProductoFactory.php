@@ -18,7 +18,7 @@ class ProductoFactory extends Factory
         return [
             'categoria_id' => Categoria::factory(), 'marca_id' => Marca::factory(),
             'nombre' => fake()->words(3, true), 'stock_actual' => 0,
-            'precio_compra_referencia' => '20.00', 'precio_venta_menor' => '30.00',
+            'precio_venta_menor' => '30.00',
             'precio_venta_mayor' => '25.00', 'estado' => true, ];
     }
 }
