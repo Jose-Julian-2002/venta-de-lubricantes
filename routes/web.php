@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\MarcaController;
+use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +27,25 @@ Route::middleware(['auth', 'usuario.activo'])->group(function (): void {
 
     Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/', DashboardController::class)->name('dashboard');
+
+        Route::resource('categorias', CategoriaController::class)
+            ->except('show')->parameters(['categorias' => 'categoria'])
+            ->middlewareFor('index', 'can:categorias.ver')
+            ->middlewareFor(['create', 'store'], 'can:categorias.crear')
+            ->middlewareFor(['edit', 'update'], 'can:categorias.editar')
+            ->middlewareFor('destroy', 'can:categorias.eliminar');
+        Route::resource('marcas', MarcaController::class)
+            ->except('show')->parameters(['marcas' => 'marca'])
+            ->middlewareFor('index', 'can:marcas.ver')
+            ->middlewareFor(['create', 'store'], 'can:marcas.crear')
+            ->middlewareFor(['edit', 'update'], 'can:marcas.editar')
+            ->middlewareFor('destroy', 'can:marcas.eliminar');
+        Route::resource('productos', ProductoController::class)
+            ->except('show')->parameters(['productos' => 'producto'])
+            ->middlewareFor('index', 'can:productos.ver')
+            ->middlewareFor(['create', 'store'], 'can:productos.crear')
+            ->middlewareFor(['edit', 'update'], 'can:productos.editar')
+            ->middlewareFor('destroy', 'can:productos.eliminar');
 
         Route::get('/roles', [RolController::class, 'index'])
             ->middleware('can:roles.ver')

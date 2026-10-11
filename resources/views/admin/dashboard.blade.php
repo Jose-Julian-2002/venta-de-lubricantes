@@ -38,14 +38,28 @@
                     <x-icon name="arrow-right" class="size-5 shrink-0 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-blue-700 dark:text-slate-500 dark:group-hover:text-blue-300" />
                 </a>
             @endcan
+            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos'] as $catalogRoute => $catalogLabel)
+                @can($catalogRoute.'.ver')
+                    <a href="{{ route('admin.'.$catalogRoute.'.index') }}" class="flex min-h-28 items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-800">
+                        <div><h2 class="font-semibold">{{ $catalogLabel }}</h2><p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Gestiona el catálogo de productos.</p></div>
+                        <x-icon name="arrow-right" class="size-5" />
+                    </a>
+                @endcan
+            @endforeach
         </div>
 
+        @cannot('categorias.ver')
+        @cannot('marcas.ver')
+        @cannot('productos.ver')
         @cannot('roles.ver')
             @cannot('usuarios.ver')
                 <p class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/50 dark:text-amber-200">
                     Tu rol aún no tiene permisos de administración asignados.
                 </p>
             @endcannot
+        @endcannot
+        @endcannot
+        @endcannot
         @endcannot
     </div>
 @endsection
