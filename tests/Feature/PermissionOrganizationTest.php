@@ -42,7 +42,8 @@ class PermissionOrganizationTest extends TestCase
                 $name = 'admin.'.$resource.'.'.$routeAction;
                 $route = Route::getRoutes()->getByName($name);
                 $this->assertNotNull($route, "Falta la ruta $name para $ability.");
-                $this->assertContains('can:'.$ability, $route->gatherMiddleware(), "Autorización incorrecta en $name.");
+                $middleware = $name === 'admin.clientes.store' ? 'can:clientes.guardar' : 'can:'.$ability;
+                $this->assertContains($middleware, $route->gatherMiddleware(), "Autorización incorrecta en $name.");
             }
         }
         foreach (['categorias', 'marcas', 'productos', 'proveedores', 'roles', 'usuarios'] as $resource) {
@@ -53,7 +54,7 @@ class PermissionOrganizationTest extends TestCase
         }
         $this->assertContains('can:compras.ver', Route::getRoutes()->getByName('admin.compras.show')->gatherMiddleware());
         $this->assertContains('can:stock.ver', Route::getRoutes()->getByName('admin.stock.kardex')->gatherMiddleware());
-        $this->assertContains('can:ventas.crear', Route::getRoutes()->getByName('admin.clientes.store')->gatherMiddleware());
+        $this->assertContains('can:clientes.guardar', Route::getRoutes()->getByName('admin.clientes.store')->gatherMiddleware());
         $this->assertContains('can:ventas.ticket,venta', Route::getRoutes()->getByName('admin.ventas.show')->gatherMiddleware());
     }
 

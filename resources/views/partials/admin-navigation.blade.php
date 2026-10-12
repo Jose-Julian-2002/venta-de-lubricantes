@@ -4,6 +4,7 @@
             ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'permission' => null, 'icon' => 'grid', 'active' => request()->routeIs('admin.dashboard')],
         ],
         'Operaciones' => [
+            ['label' => 'Clientes', 'route' => 'admin.clientes.index', 'permission' => 'clientes.ver', 'icon' => 'users', 'active' => request()->routeIs('admin.clientes.*')],
             ['label' => 'Punto de venta', 'route' => 'admin.ventas.create', 'permission' => 'ventas.crear', 'icon' => 'plus', 'active' => request()->routeIs('admin.ventas.create')],
             ['label' => 'Historial de ventas', 'route' => 'admin.ventas.index', 'permission' => 'ventas.ver', 'icon' => 'grid', 'active' => request()->routeIs('admin.ventas.index', 'admin.ventas.show')],
             ['label' => 'Compras', 'route' => 'admin.compras.index', 'permission' => 'compras.ver', 'icon' => 'grid', 'active' => request()->routeIs('admin.compras.*')],
@@ -21,6 +22,9 @@
         'Administración' => [
             ['label' => 'Roles', 'route' => 'admin.roles.index', 'permission' => 'roles.ver', 'icon' => 'shield', 'active' => request()->routeIs('admin.roles.*')],
             ['label' => 'Usuarios', 'route' => 'admin.usuarios.index', 'permission' => 'usuarios.ver', 'icon' => 'users', 'active' => request()->routeIs('admin.usuarios.*')],
+        ],
+        'Reportes' => [
+            ['label' => 'Reportes básicos', 'route' => 'admin.reportes.index', 'permission' => 'reportes.ver', 'icon' => 'grid', 'active' => request()->routeIs('admin.reportes.*')],
         ],
     ];
 @endphp

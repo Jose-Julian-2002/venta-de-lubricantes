@@ -2,11 +2,38 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Cliente;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class StoreClienteRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if (is_string($this->input('nombre'))) {
+            $this->merge(['nombre' => trim($this->input('nombre'))]);
+        }
+    }
+
+    /** @return array<\Closure(Validator): void> */
+    public function after(): array
+    {
+        return [function (Validator $validator): void {
+            if ($validator->errors()->has('nombre')) {
+                return;
+            }
+            if (mb_strtolower($this->input('nombre')) !== 'cliente general') {
+                return;
+            }
+            $cliente = $this->route('cliente');
+            if ($cliente instanceof Cliente && $cliente->nombre === 'Cliente General' && $this->input('nombre') === 'Cliente General') {
+                return;
+            }
+            $validator->errors()->add('nombre', 'Cliente General es un nombre reservado para el cliente predeterminado.');
+        }];
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */

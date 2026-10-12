@@ -8,6 +8,7 @@ use App\Http\Controllers\CompraController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UsuarioController;
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'usuario.activo'])->group(function (): void {
 
     Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/', DashboardController::class)->name('dashboard');
+        Route::get('/reportes', [ReporteController::class, 'index'])->middleware('can:reportes.ver')->name('reportes.index');
 
         Route::resource('categorias', CategoriaController::class)
             ->except('show')->parameters(['categorias' => 'categoria'])
@@ -67,7 +69,13 @@ Route::middleware(['auth', 'usuario.activo'])->group(function (): void {
             ->middlewareFor('index', 'can:ventas.ver')
             ->middlewareFor(['create', 'store'], 'can:ventas.crear')
             ->middlewareFor('show', 'can:ventas.ticket,venta');
-        Route::post('/clientes', [ClienteController::class, 'store'])->middleware('can:ventas.crear')->name('clientes.store');
+        Route::resource('clientes', ClienteController::class)
+            ->except('show')->parameters(['clientes' => 'cliente'])
+            ->middlewareFor('index', 'can:clientes.ver')
+            ->middlewareFor('create', 'can:clientes.crear')
+            ->middlewareFor('store', 'can:clientes.guardar')
+            ->middlewareFor(['edit', 'update'], 'can:clientes.editar')
+            ->middlewareFor('destroy', 'can:clientes.eliminar');
         Route::get('/stock', [StockController::class, 'index'])->middleware('can:stock.ver')->name('stock.index');
         Route::get('/stock/{producto}/kardex', [StockController::class, 'kardex'])->middleware('can:stock.ver')->name('stock.kardex');
 

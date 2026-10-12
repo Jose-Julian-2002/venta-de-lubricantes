@@ -13,8 +13,15 @@ class DashboardService
     public function resumen(?string $mes = null): array
     {
         $inicio = CarbonImmutable::createFromFormat('!Y-m', $mes ?? now('America/La_Paz')->format('Y-m'), 'America/La_Paz');
-        $desde = $inicio->setTimezone(config('app.timezone'))->format('Y-m-d H:i:s');
-        $hasta = $inicio->addMonth()->setTimezone(config('app.timezone'))->format('Y-m-d H:i:s');
+
+        return ['mes' => $inicio->format('Y-m'), ...$this->resumenEntre($inicio->format('Y-m-d'), $inicio->endOfMonth()->format('Y-m-d'))];
+    }
+
+    /** @return array{ventasTotal: string, gananciaTotal: string|null, costosPendientes: int, ventasCantidad: int, unidadesVendidas: int, marcaMasVendida: array{nombre: string, unidades: int}|null, marcasTop: list<array{nombre: string, unidades: int}>, productosTop: list<array{nombre: string, marca: string, unidades: int}>, productoMasVendido: array{nombre: string, marca: string, unidades: int}|null} */
+    public function resumenEntre(string $desde, string $hasta): array
+    {
+        $desde = CarbonImmutable::createFromFormat('!Y-m-d', $desde, 'America/La_Paz')->setTimezone(config('app.timezone'))->format('Y-m-d H:i:s');
+        $hasta = CarbonImmutable::createFromFormat('!Y-m-d', $hasta, 'America/La_Paz')->addDay()->setTimezone(config('app.timezone'))->format('Y-m-d H:i:s');
         $ventas = Venta::query()->where('estado', 'completada')->where('created_at', '>=', $desde)->where('created_at', '<', $hasta);
         $cantidadVentas = (clone $ventas)->count();
         $totalCents = 0;
@@ -53,7 +60,6 @@ class DashboardService
             ->groupBy('productos.id', 'marcas.nombre')->orderByDesc('unidades')->orderBy('productos.id')->limit(5)->get()->map(fn ($producto): array => ['nombre' => $producto->nombre, 'marca' => $producto->marca, 'unidades' => (int) $producto->unidades])->all();
 
         return [
-            'mes' => $inicio->format('Y-m'),
             'ventasTotal' => $this->money($totalCents),
             'gananciaTotal' => $pendientes > 0 ? null : $this->money($gananciaCents),
             'costosPendientes' => $pendientes,

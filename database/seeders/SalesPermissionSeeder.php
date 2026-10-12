@@ -14,7 +14,7 @@ class SalesPermissionSeeder extends Seeder
     {
         DB::transaction(function (): void {
             $ids = [];
-            foreach (['ventas.ver', 'ventas.crear'] as $name) {
+            foreach (['ventas.ver', 'ventas.crear', 'clientes.ver', 'clientes.crear', 'clientes.editar', 'clientes.eliminar'] as $name) {
                 $ids[] = Permiso::query()->firstOrCreate(['nombre' => $name])->getKey();
             }
             $role = Rol::query()->where('nombre', 'Administrador')->first();

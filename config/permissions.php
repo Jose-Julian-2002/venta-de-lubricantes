@@ -2,9 +2,10 @@
 
 return [
     'sections' => [
-        'Operaciones' => ['ventas', 'compras', 'proveedores'],
+        'Operaciones' => ['ventas', 'clientes', 'compras', 'proveedores'],
         'Catálogo' => ['categorias', 'marcas', 'productos'],
         'Inventario' => ['stock'],
+        'Reportes' => ['reportes'],
         'Administración' => ['roles', 'usuarios'],
     ],
     'catalog' => [
@@ -36,6 +37,11 @@ return [
         'compras.crear' => 'Registrar compras',
         'ventas.ver' => 'Ver historial de ventas y dashboard',
         'ventas.crear' => 'Cobrar ventas y agregar clientes en el POS',
+        'clientes.ver' => 'Ver clientes',
+        'clientes.crear' => 'Crear clientes',
+        'clientes.editar' => 'Editar clientes',
+        'clientes.eliminar' => 'Eliminar clientes',
         'stock.ver' => 'Consultar stock y Kardex',
+        'reportes.ver' => 'Ver reportes de ventas, compras, ganancia y existencias',
     ],
 ];
