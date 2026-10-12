@@ -21,40 +21,9 @@
             <span class="mt-1 block text-xs font-normal text-slate-400">Administración</span>
             </span>
         </a>
-        <nav aria-label="Navegación principal" class="flex flex-1 flex-col gap-1 px-3 py-5">
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-200 hover:bg-white/10 focus-visible:outline-blue-400">
-                <x-icon name="grid" class="size-[18px] text-slate-400" />
-                Panel
-            </a>
-            @can('roles.ver')
-                <a href="{{ route('admin.roles.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-200 hover:bg-white/10 focus-visible:outline-blue-400">
-                    <x-icon name="shield" class="size-[18px] text-slate-400" />
-                    Roles
-                </a>
-            @endcan
-            @can('usuarios.ver')
-                <a href="{{ route('admin.usuarios.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-200 hover:bg-white/10 focus-visible:outline-blue-400">
-                    <x-icon name="users" class="size-[18px] text-slate-400" />
-                    Usuarios
-                </a>
-            @endcan
-
-            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos', 'proveedores' => 'Proveedores', 'compras' => 'Compras', 'stock' => 'Stock y Kardex', 'ventas' => 'Historial de ventas'] as $catalogRoute => $catalogLabel)
-                @can($catalogRoute.'.ver')
-                    <a href="{{ route('admin.'.$catalogRoute.'.index') }}" @if(request()->routeIs('admin.'.$catalogRoute.'.*')) aria-current="page" @endif class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400">
-                        <x-icon name="grid" class="size-4" /> {{ $catalogLabel }}
-                    </a>
-                @endcan
-            @endforeach
-            @can('ventas.crear')
-                <a href="{{ route('admin.ventas.create') }}" class="flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400"><x-icon name="plus" class="size-4" /> Punto de venta</a>
-            @endcan
-            @can('compras.crear')
-                @cannot('compras.ver')
-                    <a href="{{ route('admin.compras.create') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400"><x-icon name="plus" class="size-4" /> Registrar compra</a>
-                @endcannot
-            @endcan
-</nav>
+        <nav aria-label="Navegación principal" class="flex flex-1 flex-col gap-3 px-3 pt-2 pb-5">
+            @include('partials.admin-navigation', ['mobile' => false])
+        </nav>
         <div class="border-t border-white/10 px-6 py-4 text-xs text-slate-400">
             Sesión: {{ auth()->user()->nombre }}
         </div>
@@ -64,41 +33,13 @@
         <header class="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
             <div class="flex min-h-16 items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
                 <details class="relative md:hidden">
-                    <summary class="flex size-10 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 focus-visible:outline-blue-600 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                    <summary class="flex size-11 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 focus-visible:outline-blue-600 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
                         <x-icon name="menu" class="size-5" />
                         <span class="sr-only">Abrir menú</span>
                     </summary>
-                    <nav aria-label="Navegación móvil" class="absolute left-0 top-12 z-10 grid min-w-48 gap-1 rounded-xl border border-slate-200 bg-white p-2 shadow-lg dark:border-slate-700 dark:bg-slate-900">
-                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
-                            <x-icon name="grid" class="size-4" /> Panel
-                        </a>
-                        @can('roles.ver')
-                            <a href="{{ route('admin.roles.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
-                                <x-icon name="shield" class="size-4" /> Roles
-                            </a>
-                        @endcan
-                        @can('usuarios.ver')
-                            <a href="{{ route('admin.usuarios.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
-                                <x-icon name="users" class="size-4" /> Usuarios
-                            </a>
-                        @endcan
-
-            @foreach (['categorias' => 'Categorías', 'marcas' => 'Marcas', 'productos' => 'Productos', 'proveedores' => 'Proveedores', 'compras' => 'Compras', 'stock' => 'Stock y Kardex', 'ventas' => 'Historial de ventas'] as $catalogRoute => $catalogLabel)
-                @can($catalogRoute.'.ver')
-                    <a href="{{ route('admin.'.$catalogRoute.'.index') }}" @if(request()->routeIs('admin.'.$catalogRoute.'.*')) aria-current="page" @endif class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400">
-                        <x-icon name="grid" class="size-4" /> {{ $catalogLabel }}
-                    </a>
-                @endcan
-            @endforeach
-            @can('ventas.crear')
-                <a href="{{ route('admin.ventas.create') }}" class="flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400"><x-icon name="plus" class="size-4" /> Punto de venta</a>
-            @endcan
-            @can('compras.crear')
-                @cannot('compras.ver')
-                    <a href="{{ route('admin.compras.create') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-blue-500/10 focus-visible:outline-blue-400"><x-icon name="plus" class="size-4" /> Registrar compra</a>
-                @endcannot
-            @endcan
-</nav>
+                    <nav aria-label="Navegación móvil" class="absolute left-0 top-14 z-40 flex max-h-[calc(100dvh-6rem)] w-64 max-w-[calc(100vw-2rem)] flex-col gap-3 overflow-y-auto rounded-xl border border-slate-200 bg-white px-2 pt-1 pb-3 shadow-lg dark:border-slate-700 dark:bg-slate-900">
+                        @include('partials.admin-navigation', ['mobile' => true])
+                    </nav>
                 </details>
                 <div class="min-w-0 flex-1">
                     <p class="truncate text-sm font-semibold">@yield('title', 'Administración')</p>
@@ -107,13 +48,13 @@
                 <div class="flex items-center gap-3">
                     <span class="hidden text-sm text-slate-600 sm:block dark:text-slate-300">{{ auth()->user()->nombre }}</span>
                     <button type="button" data-theme-toggle aria-label="Alternar modo claro y oscuro" aria-pressed="false" title="Cambiar tema"
-                        class="flex size-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 focus-visible:outline-blue-600 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
+                        class="flex size-11 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 focus-visible:outline-blue-600 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
                         <x-icon name="sun" class="size-5 dark:hidden" />
                         <x-icon name="moon" class="hidden size-5 dark:block" />
                     </button>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="flex size-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 focus-visible:outline-blue-600 sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2 sm:text-sm sm:font-medium dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                        <button type="submit" class="flex size-11 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 focus-visible:outline-blue-600 sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2 sm:text-sm sm:font-medium dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
                             <x-icon name="logout" class="size-[18px]" />
                             <span class="hidden sm:inline">Cerrar sesión</span>
                             <span class="sr-only sm:hidden">Cerrar sesión</span>

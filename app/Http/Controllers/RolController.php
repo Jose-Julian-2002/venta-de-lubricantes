@@ -20,7 +20,7 @@ class RolController extends Controller
     public function create(RolService $rolService): View
     {
         return view('admin.roles.create', [
-            'permisos' => $rolService->availablePermissions(),
+            'permisosPorSeccion' => $rolService->groupedPermissions(),
         ]);
     }
 
@@ -35,7 +35,7 @@ class RolController extends Controller
     {
         return view('admin.roles.edit', [
             'rol' => $rolService->findForEditing($rol),
-            'permisos' => $rolService->availablePermissions(),
+            'permisosPorSeccion' => $rolService->groupedPermissions(),
         ]);
     }
 

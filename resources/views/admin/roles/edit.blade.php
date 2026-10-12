@@ -15,7 +15,7 @@
             'action' => route('admin.roles.update', $rol),
             'method' => 'PUT',
             'rol' => $rol,
-            'permisos' => $permisos,
+            'permisosPorSeccion' => $permisosPorSeccion,
         ])
     </div>
 @endsection

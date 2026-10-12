@@ -32,6 +32,31 @@ class RolService
         return $rol->load('permisos');
     }
 
+    /** @return array<string, Collection<int, Permiso>> */
+    public function groupedPermissions(): array
+    {
+        $permissions = $this->availablePermissions()->keyBy('nombre');
+        $groups = [];
+        foreach (config('permissions.sections') as $section => $modules) {
+            $group = new Collection;
+            foreach ($modules as $module) {
+                foreach (array_keys(config('permissions.catalog')) as $name) {
+                    if (str_starts_with($name, $module.'.') && $permissions->has($name)) {
+                        $group->push($permissions->pull($name));
+                    }
+                }
+            }
+            if ($group->isNotEmpty()) {
+                $groups[$section] = $group;
+            }
+        }
+        if ($permissions->isNotEmpty()) {
+            $groups['Otros permisos'] = $permissions->values();
+        }
+
+        return $groups;
+    }
+
     /**
      * @param  array{nombre: string, permisos?: array<int, int|string>|null}  $data
      */

@@ -21,7 +21,11 @@
     <fieldset class="mt-7">
         <legend class="text-sm font-semibold">Permisos</legend>
         <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Selecciona las acciones que podrán realizar los usuarios con este rol.</p>
-        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+        <div class="mt-5 space-y-6">
+            @foreach ($permisosPorSeccion as $seccion => $permisos)
+                <fieldset class="rounded-xl border border-slate-200 p-4 dark:border-slate-700">
+                    <legend class="px-2 text-base font-semibold">{{ $seccion }}</legend>
+                    <div class="mt-2 grid gap-3 sm:grid-cols-2">
             @foreach ($permisos as $permiso)
                 <label class="flex items-start gap-3 rounded-xl border border-slate-200 p-3 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800">
                     <input type="checkbox" name="permisos[]" value="{{ $permiso->id }}"
@@ -32,6 +36,9 @@
                         <span class="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">{{ $permiso->nombre }}</span>
                     </span>
                 </label>
+            @endforeach
+                    </div>
+                </fieldset>
             @endforeach
         </div>
         @error('permisos')

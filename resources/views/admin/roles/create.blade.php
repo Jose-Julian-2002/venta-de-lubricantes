@@ -13,7 +13,7 @@
         </div>
         @include('admin.roles._form', [
             'action' => route('admin.roles.store'),
-            'permisos' => $permisos,
+            'permisosPorSeccion' => $permisosPorSeccion,
         ])
     </div>
 @endsection

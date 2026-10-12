@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'sections' => [
+        'Operaciones' => ['ventas', 'compras', 'proveedores'],
+        'Catálogo' => ['categorias', 'marcas', 'productos'],
+        'Inventario' => ['stock'],
+        'Administración' => ['roles', 'usuarios'],
+    ],
     'catalog' => [
         'roles.ver' => 'Ver roles',
         'roles.crear' => 'Crear roles',
@@ -10,10 +16,10 @@ return [
         'usuarios.crear' => 'Crear usuarios',
         'usuarios.editar' => 'Editar usuarios',
         'usuarios.eliminar' => 'Eliminar usuarios',
-        'categorias.ver' => 'Ver categorias',
-        'categorias.crear' => 'Crear categorias',
-        'categorias.editar' => 'Editar categorias',
-        'categorias.eliminar' => 'Eliminar categorias',
+        'categorias.ver' => 'Ver categorías',
+        'categorias.crear' => 'Crear categorías',
+        'categorias.editar' => 'Editar categorías',
+        'categorias.eliminar' => 'Eliminar categorías',
         'marcas.ver' => 'Ver marcas',
         'marcas.crear' => 'Crear marcas',
         'marcas.editar' => 'Editar marcas',
@@ -28,8 +34,8 @@ return [
         'proveedores.eliminar' => 'Eliminar proveedores',
         'compras.ver' => 'Ver historial de compras',
         'compras.crear' => 'Registrar compras',
-        'ventas.ver' => 'Ver historial de ventas',
-        'ventas.crear' => 'Cobrar ventas en el POS',
+        'ventas.ver' => 'Ver historial de ventas y dashboard',
+        'ventas.crear' => 'Cobrar ventas y agregar clientes en el POS',
         'stock.ver' => 'Consultar stock y Kardex',
     ],
 ];
