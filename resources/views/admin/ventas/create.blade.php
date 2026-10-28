@@ -6,7 +6,8 @@
         'id' => $producto->id, 'nombre' => $producto->nombre, 'marca' => $producto->marca->nombre,
         'categoria_id' => $producto->categoria_id, 'categoria' => $producto->categoria->nombre, 'marca_id' => $producto->marca_id,
         'stock' => $producto->stock_actual, 'menor' => $producto->precio_venta_menor, 'mayor' => $producto->precio_venta_mayor,
-        'unidades_por_caja' => $producto->ultimaCompraDetalle?->unidades_por_caja,
+        'unidades_por_caja' => $producto->unidades_por_caja_sucursal,
+        'foto' => $producto->fotoMiniaturaUrl(),
     ])->values();
     $carrito = collect(old('detalles', []))->filter(fn ($row) => is_array($row))->map(fn ($row) => [
         'producto_id' => $row['producto_id'] ?? '', 'cantidad' => $row['cantidad'] ?? 1, 'tipo_precio' => $row['tipo_precio'] ?? 'menor',
@@ -49,6 +50,7 @@
         }
     }" x-on:submit="if (!valido || sending) { $event.preventDefault(); } else { sending = true; }">
     @csrf
+    <input type="hidden" name="sucursal_origen" value="{{ app(\App\Services\SucursalContext::class)->id() }}">
     <input type="hidden" x-ref="csrf" value="{{ csrf_token() }}">
     <input type="hidden" name="token" value="{{ old('token', (string) Illuminate\Support\Str::uuid()) }}">
     <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
@@ -78,7 +80,7 @@
             <div class="divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900">
                 <template x-for="p in resultados" :key="p.id">
                     <button type="button" x-on:click="agregar(p)" :disabled="!puedeAgregar(p)" class="flex min-h-24 w-full items-center justify-between gap-3 p-4 text-left hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-blue-600 disabled:opacity-60 dark:hover:bg-slate-800">
-                        <span class="min-w-0"><span class="block text-sm text-slate-600 dark:text-slate-400" x-text="p.marca"></span><span class="block break-words font-medium" x-text="p.nombre"></span><span class="mt-1 block text-xs" x-text="p.stock + ' unidades en stock'"></span></span>
+                        <span class="flex min-w-0 items-center gap-3"><template x-if="p.foto"><img :src="p.foto" alt="" width="56" height="56" loading="lazy" decoding="async" class="size-14 shrink-0 rounded-lg object-contain"></template><span class="min-w-0"><span class="block text-sm text-slate-600 dark:text-slate-400" x-text="p.marca"></span><span class="block break-words font-medium" x-text="p.nombre"></span><span class="mt-1 block text-xs" x-text="p.stock + ' unidades en stock'"></span></span></span>
                         <span class="shrink-0 text-right"><span class="block font-semibold tabular-nums" x-text="precioCatalogo(p)"></span><span class="block text-xs text-slate-600 dark:text-slate-400" x-text="tarifa === 'mayor' && factor(p) > 0 ? 'Caja de ' + factor(p) + ' unidades' : 'Por unidad'"></span><span class="block text-xs text-blue-700 dark:text-blue-300" x-text="puedeAgregar(p) ? 'Agregar' : (tarifa === 'mayor' && factor(p) < 1 ? 'Sin compra registrada' : (p[tarifa] === null ? 'Sin precio' : 'Stock insuficiente'))"></span></span>
                     </button>
                 </template>

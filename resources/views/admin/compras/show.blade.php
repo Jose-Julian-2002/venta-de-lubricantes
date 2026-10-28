@@ -4,6 +4,7 @@
 <div class="mx-auto max-w-6xl">
     <div class="mb-6 flex flex-wrap items-center justify-between gap-4"><h1 class="text-2xl font-semibold">Compra #{{ $compra->id }}</h1><a href="{{ route('admin.compras.index') }}" class="py-2 text-sm text-blue-700 dark:text-blue-300">Volver al historial</a></div>
     <dl class="mb-6 grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 sm:grid-cols-2 lg:grid-cols-4 dark:border-slate-800 dark:bg-slate-900">
+        <div><dt class="text-sm text-slate-600 dark:text-slate-400">Sucursal</dt><dd class="mt-1 font-medium">{{ $compra->sucursal->nombre }}</dd></div>
         <div><dt class="text-sm text-slate-600 dark:text-slate-400">Proveedor</dt><dd class="mt-1 font-medium">{{ $compra->proveedor->nombre_empresa }}</dd></div>
         <div><dt class="text-sm text-slate-600 dark:text-slate-400">Fecha de compra</dt><dd class="mt-1 font-medium">{{ $compra->fecha_compra->format('d/m/Y H:i') }}</dd></div>
         <div><dt class="text-sm text-slate-600 dark:text-slate-400">Registrada por</dt><dd class="mt-1 font-medium">{{ $compra->usuario->nombre }}</dd></div>

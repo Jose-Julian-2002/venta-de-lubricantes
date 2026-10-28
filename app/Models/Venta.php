@@ -17,7 +17,14 @@ class Venta extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['usuario_id', 'cliente_id', 'token', 'tipo_pago', 'total', 'estado', 'created_at'];
+    protected $fillable = ['sucursal_id', 'usuario_id', 'cliente_id', 'token', 'tipo_pago', 'total', 'estado', 'created_at'];
+
+    protected $attributes = ['sucursal_id' => Sucursal::PRINCIPAL_ID];
+
+    public function sucursal(): BelongsTo
+    {
+        return $this->belongsTo(Sucursal::class, 'sucursal_id');
+    }
 
     protected function casts(): array
     {

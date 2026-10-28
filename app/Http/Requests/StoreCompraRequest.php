@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Services\SucursalContext;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -28,6 +29,8 @@ class StoreCompraRequest extends FormRequest
             'detalles.*.precio_compra_caja' => ['required', ...$money],
             'detalles.*.nuevo_precio_venta_menor' => ['nullable', ...$money],
             'detalles.*.nuevo_precio_venta_mayor' => ['nullable', ...$money],
+            'sucursal_origen' => ['sometimes', 'integer', Rule::in([app(SucursalContext::class)->id()])],
+            'sucursal_id' => ['prohibited'],
             'total' => ['prohibited'], 'usuario_id' => ['prohibited'],
         ];
     }
@@ -36,6 +39,7 @@ class StoreCompraRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'sucursal_origen.in' => 'La sucursal de trabajo cambió. Vuelve a abrir el formulario antes de registrar la operación.',
             'required' => 'El campo :attribute es obligatorio.', 'exists' => 'La selección de :attribute no es válida o está inactiva.',
             'integer' => 'El campo :attribute debe ser un número entero.', 'numeric' => 'El campo :attribute debe ser un número.',
             'min' => 'El campo :attribute debe ser al menos :min.', 'max' => 'El campo :attribute supera el máximo permitido (:max).',

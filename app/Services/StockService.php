@@ -7,7 +7,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class StockService
 {
-    public function __construct(private ProductoService $productoService) {}
+    public function __construct(private ProductoService $productoService, private SucursalContext $context, private InventarioSucursalService $inventario) {}
 
     /** @param array{buscar?: string|null, categoria_id?: int|string|null, marca_id?: int|string|null} $filters */
     public function inventory(array $filters): LengthAwarePaginator
@@ -23,11 +23,11 @@ class StockService
 
     public function findForViewing(Producto $producto): Producto
     {
-        return $producto->load(['categoria', 'marca']);
+        return $this->inventario->productos()->where('productos.id', $producto->getKey())->with(['categoria', 'marca'])->firstOrFail();
     }
 
     public function movements(Producto $producto): LengthAwarePaginator
     {
-        return $producto->stockMovimientos()->with(['usuario', 'compraDetalle.compra', 'ventaDetalle.venta'])->orderByDesc('id')->paginate(20);
+        return $producto->stockMovimientos()->where('sucursal_id', $this->context->id())->with(['usuario', 'compraDetalle.compra', 'ventaDetalle.venta'])->orderByDesc('id')->paginate(20);
     }
 }

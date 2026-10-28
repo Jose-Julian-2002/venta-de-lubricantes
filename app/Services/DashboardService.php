@@ -9,6 +9,8 @@ use Carbon\CarbonImmutable;
 
 class DashboardService
 {
+    public function __construct(private SucursalContext $context) {}
+
     /** @return array{mes: string, ventasTotal: string, gananciaTotal: string|null, costosPendientes: int, ventasCantidad: int, unidadesVendidas: int, marcaMasVendida: array{nombre: string, unidades: int}|null, marcasTop: list<array{nombre: string, unidades: int}>, productosTop: list<array{nombre: string, marca: string, unidades: int}>, productoMasVendido: array{nombre: string, marca: string, unidades: int}|null} */
     public function resumen(?string $mes = null): array
     {
@@ -22,7 +24,7 @@ class DashboardService
     {
         $desde = CarbonImmutable::createFromFormat('!Y-m-d', $desde, 'America/La_Paz')->setTimezone(config('app.timezone'))->format('Y-m-d H:i:s');
         $hasta = CarbonImmutable::createFromFormat('!Y-m-d', $hasta, 'America/La_Paz')->addDay()->setTimezone(config('app.timezone'))->format('Y-m-d H:i:s');
-        $ventas = Venta::query()->where('estado', 'completada')->where('created_at', '>=', $desde)->where('created_at', '<', $hasta);
+        $ventas = Venta::query()->where('sucursal_id', $this->context->id())->where('estado', 'completada')->where('created_at', '>=', $desde)->where('created_at', '<', $hasta);
         $cantidadVentas = (clone $ventas)->count();
         $totalCents = 0;
         foreach ((clone $ventas)->select('id', 'total')->cursor() as $venta) {
@@ -32,6 +34,7 @@ class DashboardService
             ->join('compras', 'compras.id', '=', 'compra_detalles.compra_id')
             ->join('stock_movimientos', 'stock_movimientos.compra_detalle_id', '=', 'compra_detalles.id')
             ->whereColumn('compra_detalles.producto_id', 'venta_detalles.producto_id')
+            ->whereColumn('compras.sucursal_id', 'ventas.sucursal_id')
             ->where('stock_movimientos.tipo', 'entrada')->where('stock_movimientos.motivo', 'compra')
             ->whereColumn('stock_movimientos.created_at', '<=', 'ventas.created_at')
             ->whereColumn('compras.fecha_compra', '<=', 'ventas.created_at')
@@ -40,6 +43,7 @@ class DashboardService
             ->join('ventas', 'ventas.id', '=', 'venta_detalles.venta_id')
             ->join('productos', 'productos.id', '=', 'venta_detalles.producto_id')
             ->join('marcas', 'marcas.id', '=', 'productos.marca_id')
+            ->where('ventas.sucursal_id', $this->context->id())
             ->where('ventas.estado', 'completada')->where('ventas.created_at', '>=', $desde)->where('ventas.created_at', '<', $hasta);
         $gananciaCents = 0;
         $pendientes = 0;

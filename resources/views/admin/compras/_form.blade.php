@@ -23,6 +23,7 @@
     }"
     x-on:submit="sending = true">
     @csrf
+    <input type="hidden" name="sucursal_origen" value="{{ app(\App\Services\SucursalContext::class)->id() }}">
     @if ($errors->any())
         <ul role="alert" class="mb-5 list-inside list-disc rounded-lg bg-rose-50 p-4 text-sm text-rose-800 dark:bg-rose-950 dark:text-rose-200">
             @foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach

@@ -20,6 +20,7 @@
             ['label' => 'Stock y Kardex', 'route' => 'admin.stock.index', 'permission' => 'stock.ver', 'icon' => 'grid', 'active' => request()->routeIs('admin.stock.*')],
         ],
         'Administración' => [
+            ['label' => 'Sucursales', 'route' => 'admin.sucursales.index', 'permission' => 'sucursales.ver', 'icon' => 'grid', 'active' => request()->routeIs('admin.sucursales.*')],
             ['label' => 'Roles', 'route' => 'admin.roles.index', 'permission' => 'roles.ver', 'icon' => 'shield', 'active' => request()->routeIs('admin.roles.*')],
             ['label' => 'Usuarios', 'route' => 'admin.usuarios.index', 'permission' => 'usuarios.ver', 'icon' => 'users', 'active' => request()->routeIs('admin.usuarios.*')],
         ],

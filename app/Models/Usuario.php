@@ -18,7 +18,9 @@ class Usuario extends Authenticatable
 
     protected $table = 'usuarios';
 
-    protected $fillable = ['rol_id', 'nombre', 'email', 'password', 'estado'];
+    protected $fillable = ['rol_id', 'sucursal_id', 'nombre', 'email', 'password', 'estado'];
+
+    protected $attributes = ['sucursal_id' => Sucursal::PRINCIPAL_ID];
 
     protected $hidden = ['password'];
 
@@ -33,6 +35,11 @@ class Usuario extends Authenticatable
     public function rol(): BelongsTo
     {
         return $this->belongsTo(Rol::class, 'rol_id');
+    }
+
+    public function sucursal(): BelongsTo
+    {
+        return $this->belongsTo(Sucursal::class, 'sucursal_id');
     }
 
     public function hasPermission(string $permission): bool

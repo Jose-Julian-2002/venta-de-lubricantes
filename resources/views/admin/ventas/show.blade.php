@@ -23,6 +23,7 @@
     @if(session('status'))<p role="status" class="ticket-status mx-auto mb-4 max-w-md text-sm text-emerald-800">{{ session('status') }}</p>@endif
     <main class="ticket mx-auto max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <header class="border-b border-dashed border-slate-300 pb-4 text-center">
+            <p class="text-sm">Sucursal: {{ $venta->sucursal->nombre }}</p>
             <h1 class="text-xl font-bold">{{ config('app.name') }}</h1>
             <p class="mt-2 text-sm">Ticket de venta #{{ $venta->id }}</p>
             <p class="text-sm">{{ $venta->created_at->format('d/m/Y H:i') }}</p>

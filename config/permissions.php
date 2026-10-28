@@ -6,9 +6,12 @@ return [
         'Catálogo' => ['categorias', 'marcas', 'productos'],
         'Inventario' => ['stock'],
         'Reportes' => ['reportes'],
-        'Administración' => ['roles', 'usuarios'],
+        'Administración' => ['sucursales', 'roles', 'usuarios'],
     ],
     'catalog' => [
+        'sucursales.ver' => 'Consultar y seleccionar cualquier sucursal',
+        'sucursales.crear' => 'Crear sucursales',
+        'sucursales.editar' => 'Editar y desactivar sucursales',
         'roles.ver' => 'Ver roles',
         'roles.crear' => 'Crear roles',
         'roles.editar' => 'Editar roles y sus permisos',

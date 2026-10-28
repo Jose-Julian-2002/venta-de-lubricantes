@@ -16,7 +16,14 @@ class StockMovimiento extends Model
 
     protected $table = 'stock_movimientos';
 
-    protected $fillable = ['producto_id', 'usuario_id', 'compra_detalle_id', 'venta_detalle_id', 'tipo', 'cantidad', 'stock_anterior', 'stock_nuevo', 'motivo', 'created_at'];
+    protected $fillable = ['sucursal_id', 'producto_id', 'usuario_id', 'compra_detalle_id', 'venta_detalle_id', 'tipo', 'cantidad', 'stock_anterior', 'stock_nuevo', 'motivo', 'created_at'];
+
+    protected $attributes = ['sucursal_id' => Sucursal::PRINCIPAL_ID];
+
+    public function sucursal(): BelongsTo
+    {
+        return $this->belongsTo(Sucursal::class, 'sucursal_id');
+    }
 
     protected function casts(): array
     {

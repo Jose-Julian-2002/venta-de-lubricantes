@@ -14,7 +14,7 @@
 <th scope="col" class="px-4 py-3">Nombre</th><th scope="col" class="px-4 py-3">Categoría</th><th scope="col" class="px-4 py-3">Marca</th><th scope="col" class="px-4 py-3">Stock (unidades)</th><th scope="col" class="px-4 py-3">Venta menor (Bs)</th><th scope="col" class="px-4 py-3">Venta mayor (Bs)</th><th scope="col" class="px-4 py-3">Estado</th><th scope="col" class="px-4 py-3">Acciones</th>
 </tr></thead><tbody class="divide-y divide-slate-100 dark:divide-slate-800">
 @forelse ($productos as $producto)<tr>
-<td class="px-4 py-4 font-medium">{{ $producto->nombre }}</td>
+<td class="px-4 py-4 font-medium"><div class="flex items-center gap-3">@if($producto->foto_path)<img src="{{ $producto->fotoMiniaturaUrl() }}" alt="" width="48" height="48" loading="lazy" decoding="async" class="size-12 shrink-0 rounded-lg bg-slate-50 object-contain dark:bg-slate-800">@endif<span>{{ $producto->nombre }}</span></div></td>
 <td class="px-4 py-4">{{ $producto->categoria->nombre }}</td><td class="px-4 py-4">{{ $producto->marca->nombre }}</td><td class="px-4 py-4 tabular-nums">{{ $producto->stock_actual }}</td>
 <td class="px-4 py-4 tabular-nums">{{ $producto->precio_venta_menor === null ? 'Sin precio' : number_format((float) $producto->precio_venta_menor, 2, ',', '.') }}</td><td class="px-4 py-4 tabular-nums">{{ $producto->precio_venta_mayor === null ? 'Sin precio' : number_format((float) $producto->precio_venta_mayor, 2, ',', '.') }}</td>
 <td class="px-4 py-4">{{ $producto->estado ? 'Activo' : 'Inactivo' }}</td>

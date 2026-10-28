@@ -17,6 +17,7 @@ class StoreProductoRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096', 'dimensions:max_width=4000,max_height=4000'],
             'nombre' => ['required', 'string', 'max:150'],
             'categoria_id' => ['required', 'integer', 'exists:categorias,id'],
             'marca_id' => ['required', 'integer', 'exists:marcas,id'],
@@ -54,6 +55,10 @@ class StoreProductoRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'foto.image' => 'La foto debe ser una imagen válida.',
+            'foto.mimes' => 'Usa una foto JPG, PNG o WebP.',
+            'foto.max' => 'La foto no debe superar los 4 MB.',
+            'foto.dimensions' => 'La foto no debe superar los 4000 píxeles de ancho o alto.',
             'required' => 'El campo :attribute es obligatorio.',
             'unidades_por_caja.prohibited' => 'Las unidades por caja se registran en el detalle de compra.',
             'string' => 'El campo :attribute debe ser un texto.',

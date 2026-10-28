@@ -1,6 +1,18 @@
-<form action="{{ $action }}" method="POST" class="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+<form action="{{ $action }}" method="POST" enctype="multipart/form-data" class="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
 @csrf
 @isset($method) @method($method) @endisset
+<div class="mb-6">
+    <label for="foto" class="mb-2 block text-sm font-medium">Foto del producto (opcional)</label>
+    @if (isset($producto) && $producto->foto_path)
+        <a href="{{ $producto->fotoUrl() }}" target="_blank" rel="noopener" class="mb-3 inline-block rounded-lg focus-visible:outline-blue-600" aria-label="Ver foto de {{ $producto->nombre }}">
+            <img src="{{ $producto->fotoMiniaturaUrl() }}" alt="{{ $producto->nombre }}" width="120" height="120" class="size-30 rounded-lg bg-slate-50 object-contain dark:bg-slate-800">
+        </a>
+        <label class="mb-3 flex items-center gap-2 text-sm"><input type="checkbox" name="quitar_foto" value="1" @checked(old('quitar_foto')) class="size-4">Quitar foto actual</label>
+    @endif
+    <input id="foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="foto-ayuda @error('foto') foto-error @enderror" class="block min-h-11 w-full rounded-lg border border-slate-300 bg-white p-2 text-sm focus-visible:outline-blue-600 dark:border-slate-700 dark:bg-slate-950" @error('foto') aria-invalid="true" @enderror>
+    <p id="foto-ayuda" class="mt-2 text-xs text-slate-600 dark:text-slate-400">JPG, PNG o WebP, hasta 4 MB y 4000 × 4000 píxeles. Se optimiza automáticamente. Una foto nueva reemplaza la actual.</p>
+    @error('foto')<p id="foto-error" class="mt-2 text-sm text-rose-700 dark:text-rose-300">{{ $message }}</p>@enderror
+</div>
 @if ($categorias->isEmpty() || $marcas->isEmpty())<p role="status" class="mb-5 text-sm text-amber-700 dark:text-amber-300">Registra al menos una categoría y una marca antes de crear productos.</p>@endif
 <div class="grid gap-5 sm:grid-cols-2"><div><label for="nombre" class="mb-2 block text-sm font-medium">Nombre</label>
 <input id="nombre" name="nombre" placeholder="Ej. edge 5W-30 1L" value="{{ old('nombre', $producto->nombre ?? '') }}" required maxlength="150" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" @error('nombre') aria-invalid="true" aria-describedby="nombre-error" @enderror>

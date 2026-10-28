@@ -24,11 +24,15 @@ class RolService
      */
     public function availablePermissions(): Collection
     {
-        return Permiso::query()->orderBy('nombre')->get();
+        return Permiso::query()
+            ->when(! auth()->user()?->can('sucursales.ver'), fn ($query) => $query->where('nombre', 'not like', 'sucursales.%'))
+            ->orderBy('nombre')->get();
     }
 
     public function findForEditing(Rol $rol): Rol
     {
+        abort_if(! auth()->user()?->can('sucursales.ver') && $rol->permisos()->where('nombre', 'like', 'sucursales.%')->exists(), 404);
+
         return $rol->load('permisos');
     }
 
@@ -75,6 +79,8 @@ class RolService
      */
     public function update(Rol $rol, array $data): Rol
     {
+        $this->findForEditing($rol);
+
         return DB::transaction(function () use ($rol, $data): Rol {
             $rol->update(['nombre' => $data['nombre']]);
             $rol->permisos()->sync($data['permisos'] ?? []);
@@ -85,6 +91,7 @@ class RolService
 
     public function delete(Rol $rol): void
     {
+        $this->findForEditing($rol);
         DB::transaction(function () use ($rol): void {
             $lockedRol = Rol::query()->whereKey($rol->getKey())->lockForUpdate()->firstOrFail();
 

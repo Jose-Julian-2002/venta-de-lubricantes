@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Storage;
 
 class Producto extends Model
 {
@@ -18,7 +19,30 @@ class Producto extends Model
 
     protected $table = 'productos';
 
-    protected $fillable = ['categoria_id', 'marca_id', 'nombre', 'precio_venta_menor', 'precio_venta_mayor', 'estado'];
+    protected $fillable = ['categoria_id', 'marca_id', 'nombre', 'precio_venta_menor', 'precio_venta_mayor', 'estado', 'foto_path', 'foto_miniatura_path'];
+
+    protected static function booted(): void
+    {
+        static::created(function (Producto $producto): void {
+            if ($producto->stock_actual > 0) {
+                SucursalProducto::query()->create([
+                    'sucursal_id' => Sucursal::PRINCIPAL_ID,
+                    'producto_id' => $producto->getKey(),
+                    'stock_actual' => $producto->stock_actual,
+                ]);
+            }
+        });
+    }
+
+    public function fotoUrl(): ?string
+    {
+        return $this->foto_path === null ? null : Storage::disk('public')->url($this->foto_path);
+    }
+
+    public function fotoMiniaturaUrl(): ?string
+    {
+        return $this->foto_miniatura_path === null ? null : Storage::disk('public')->url($this->foto_miniatura_path);
+    }
 
     protected function casts(): array
     {

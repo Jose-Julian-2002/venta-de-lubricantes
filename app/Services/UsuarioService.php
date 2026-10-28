@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Rol;
+use App\Models\Sucursal;
 use App\Models\Usuario;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,10 +13,14 @@ use Illuminate\Validation\ValidationException;
 
 class UsuarioService
 {
+    public function __construct(private SucursalContext $context) {}
+
     public function paginate(): LengthAwarePaginator
     {
         return Usuario::query()
-            ->with('rol')
+            ->where('sucursal_id', $this->context->id())
+            ->when(! Auth::user()?->can('sucursales.ver'), fn ($query) => $query->whereDoesntHave('rol.permisos', fn ($permisos) => $permisos->where('nombre', 'like', 'sucursales.%')))
+            ->with(['rol', 'sucursal'])
             ->orderBy('nombre')
             ->paginate(15);
     }
@@ -25,7 +30,24 @@ class UsuarioService
      */
     public function availableRoles(): Collection
     {
-        return Rol::query()->orderBy('nombre')->get();
+        return Rol::query()
+            ->when(! Auth::user()?->can('sucursales.ver'), fn ($query) => $query->whereDoesntHave('permisos', fn ($permisos) => $permisos->where('nombre', 'like', 'sucursales.%')))
+            ->orderBy('nombre')->get();
+    }
+
+    public function findForEditing(Usuario $usuario): Usuario
+    {
+        $this->context->assertCurrent((int) $usuario->sucursal_id);
+        abort_if(! Auth::user()?->can('sucursales.ver') && $usuario->rol->permisos()->where('nombre', 'like', 'sucursales.%')->exists(), 404);
+
+        return $usuario;
+    }
+
+    public function availableSucursales(): Collection
+    {
+        return Sucursal::query()->where('estado', true)
+            ->when(! Auth::user()?->can('sucursales.ver'), fn ($query) => $query->whereKey($this->context->id()))
+            ->orderBy('nombre')->get();
     }
 
     /**
@@ -35,6 +57,8 @@ class UsuarioService
     {
         unset($data['password_confirmation']);
 
+        $data['sucursal_id'] ??= $this->context->id();
+
         return DB::transaction(fn (): Usuario => Usuario::query()->create($data));
     }
 
@@ -43,6 +67,7 @@ class UsuarioService
      */
     public function update(Usuario $usuario, array $data): Usuario
     {
+        $this->findForEditing($usuario);
         unset($data['password_confirmation']);
 
         if (blank($data['password'] ?? null)) {
@@ -58,6 +83,7 @@ class UsuarioService
 
     public function delete(Usuario $usuario): void
     {
+        $this->findForEditing($usuario);
         if ((int) Auth::id() === (int) $usuario->getKey()) {
             throw ValidationException::withMessages([
                 'usuario' => __('admin.users.cannot_delete_self'),

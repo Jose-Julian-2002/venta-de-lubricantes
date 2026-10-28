@@ -77,6 +77,7 @@
                 </div>
             @endif
 
+            @include('partials.sucursal-selector')
             @yield('content')
         </main>
     </div>

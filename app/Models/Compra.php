@@ -17,7 +17,14 @@ class Compra extends Model
 
     protected $table = 'compras';
 
-    protected $fillable = ['proveedor_id', 'usuario_id', 'total', 'fecha_compra'];
+    protected $fillable = ['sucursal_id', 'proveedor_id', 'usuario_id', 'total', 'fecha_compra'];
+
+    protected $attributes = ['sucursal_id' => Sucursal::PRINCIPAL_ID];
+
+    public function sucursal(): BelongsTo
+    {
+        return $this->belongsTo(Sucursal::class, 'sucursal_id');
+    }
 
     protected function casts(): array
     {

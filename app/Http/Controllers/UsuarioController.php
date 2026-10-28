@@ -21,6 +21,7 @@ class UsuarioController extends Controller
     {
         return view('admin.usuarios.create', [
             'roles' => $usuarioService->availableRoles(),
+            'sucursales' => $usuarioService->availableSucursales(),
         ]);
     }
 
@@ -34,8 +35,9 @@ class UsuarioController extends Controller
     public function edit(Usuario $usuario, UsuarioService $usuarioService): View
     {
         return view('admin.usuarios.edit', [
-            'usuario' => $usuario,
+            'usuario' => $usuarioService->findForEditing($usuario),
             'roles' => $usuarioService->availableRoles(),
+            'sucursales' => $usuarioService->availableSucursales(),
         ]);
     }
 

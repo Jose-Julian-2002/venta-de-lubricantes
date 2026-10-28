@@ -11,6 +11,8 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\SucursalActualController;
+use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VentaController;
 use Illuminate\Support\Facades\Route;
@@ -31,7 +33,13 @@ Route::middleware('guest')->group(function (): void {
 Route::middleware(['auth', 'usuario.activo'])->group(function (): void {
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
-    Route::prefix('admin')->name('admin.')->group(function (): void {
+    Route::prefix('admin')->name('admin.')->middleware('sucursal.activa')->group(function (): void {
+        Route::post('/sucursal-actual', [SucursalActualController::class, 'store'])->middleware('can:sucursales.ver')->name('sucursal-actual.store');
+        Route::resource('sucursales', SucursalController::class)->except(['show', 'destroy'])
+            ->parameters(['sucursales' => 'sucursal'])
+            ->middlewareFor('index', 'can:sucursales.ver')
+            ->middlewareFor(['create', 'store'], 'can:sucursales.crear')
+            ->middlewareFor(['edit', 'update'], 'can:sucursales.editar');
         Route::get('/', DashboardController::class)->name('dashboard');
         Route::get('/reportes', [ReporteController::class, 'index'])->middleware('can:reportes.ver')->name('reportes.index');
 

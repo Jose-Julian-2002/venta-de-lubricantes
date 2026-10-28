@@ -10,6 +10,15 @@
 
     <div class="grid gap-5 sm:grid-cols-2">
         <div>
+            <label for="sucursal_id" class="mb-1.5 block text-sm font-medium">Sucursal</label>
+            <select id="sucursal_id" name="sucursal_id" required class="min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm focus-visible:outline-blue-600 dark:border-slate-700 dark:bg-slate-950">
+                @foreach ($sucursales as $sucursal)
+                    <option value="{{ $sucursal->id }}" @selected((string) old('sucursal_id', $usuario->sucursal_id ?? app(\App\Services\SucursalContext::class)->id()) === (string) $sucursal->id)>{{ $sucursal->nombre }}</option>
+                @endforeach
+            </select>
+            @error('sucursal_id')<p class="mt-1.5 text-sm text-rose-700 dark:text-rose-300">{{ $message }}</p>@enderror
+        </div>
+        <div>
             <label for="nombre" class="mb-1.5 block text-sm font-medium">Nombre completo</label>
             <input id="nombre" name="nombre" value="{{ old('nombre', $usuario->nombre ?? '') }}" required maxlength="100"
                 class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950">

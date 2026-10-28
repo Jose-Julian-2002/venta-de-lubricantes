@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Services\UsuarioService;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUsuarioRequest extends FormRequest
 {
@@ -20,7 +22,8 @@ class StoreUsuarioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rol_id' => ['required', 'integer', 'exists:roles,id'],
+            'sucursal_id' => ['sometimes', 'required', 'integer', Rule::exists('sucursales', 'id')->where('estado', true), Rule::in(app(UsuarioService::class)->availableSucursales()->modelKeys())],
+            'rol_id' => ['required', 'integer', Rule::in(app(UsuarioService::class)->availableRoles()->modelKeys())],
             'nombre' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:150', 'unique:usuarios,email'],
             'password' => ['required', 'string', 'min:12', 'confirmed'],

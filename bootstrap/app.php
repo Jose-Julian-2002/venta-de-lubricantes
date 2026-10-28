@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureSucursalActiva;
 use App\Http\Middleware\EnsureUsuarioActivo;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'usuario.activo' => EnsureUsuarioActivo::class,
+            'sucursal.activa' => EnsureSucursalActiva::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

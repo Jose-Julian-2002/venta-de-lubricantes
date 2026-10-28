@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Services\RolService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -28,7 +29,7 @@ class UpdateRolRequest extends FormRequest
                 Rule::unique('roles', 'nombre')->ignore($this->route('rol')),
             ],
             'permisos' => ['nullable', 'array'],
-            'permisos.*' => ['integer', 'exists:permisos,id'],
+            'permisos.*' => ['integer', Rule::in(app(RolService::class)->availablePermissions()->modelKeys())],
         ];
     }
 }

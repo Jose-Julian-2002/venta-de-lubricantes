@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Services\RolService;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRolRequest extends FormRequest
 {
@@ -22,7 +24,7 @@ class StoreRolRequest extends FormRequest
         return [
             'nombre' => ['required', 'string', 'max:50', 'unique:roles,nombre'],
             'permisos' => ['nullable', 'array'],
-            'permisos.*' => ['integer', 'exists:permisos,id'],
+            'permisos.*' => ['integer', Rule::in(app(RolService::class)->availablePermissions()->modelKeys())],
         ];
     }
 }
