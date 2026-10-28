@@ -6,10 +6,13 @@ use App\Models\Cliente;
 use App\Models\CompraDetalle;
 use App\Models\Producto;
 use App\Models\StockMovimiento;
+use App\Models\Sucursal;
 use App\Models\Usuario;
 use App\Models\Venta;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -19,14 +22,32 @@ class VentaService
 
     private const MAX_CENTS = 9999999999;
 
-    public function paginate(): LengthAwarePaginator
+    /** @param array{sucursal_id?: int|string} $filters */
+    public function paginate(array $filters = []): LengthAwarePaginator
     {
-        return Venta::query()->where('sucursal_id', $this->context->id())->with(['cliente', 'usuario', 'sucursal'])->withCount('detalles')->orderByDesc('created_at')->orderByDesc('id')->paginate(15);
+        $sucursalId = Auth::user()?->can('sucursales.ver')
+            ? ($filters['sucursal_id'] ?? $this->context->id())
+            : $this->context->id();
+
+        return Venta::query()
+            ->when($sucursalId !== 'todas', fn (Builder $query): Builder => $query->where('sucursal_id', $sucursalId))
+            ->with(['cliente', 'usuario', 'sucursal'])->withCount('detalles')
+            ->orderByDesc('created_at')->orderByDesc('id')->paginate(15)->withQueryString();
+    }
+
+    /** @return Collection<int, Sucursal> */
+    public function availableSucursales(): Collection
+    {
+        return Sucursal::query()
+            ->when(! Auth::user()?->can('sucursales.ver'), fn (Builder $query): Builder => $query->whereKey($this->context->id()))
+            ->orderBy('nombre')->orderBy('id')->get();
     }
 
     public function findForViewing(Venta $venta): Venta
     {
-        $this->context->assertCurrent((int) $venta->sucursal_id);
+        if (! Auth::user()?->can('sucursales.ver')) {
+            $this->context->assertCurrent((int) $venta->sucursal_id);
+        }
 
         return $venta->load(['sucursal', 'cliente', 'usuario', 'detalles.producto.marca']);
     }

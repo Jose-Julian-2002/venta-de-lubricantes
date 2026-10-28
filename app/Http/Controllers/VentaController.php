@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexVentaRequest;
 use App\Http\Requests\StoreVentaRequest;
 use App\Models\Venta;
 use App\Services\VentaService;
@@ -10,9 +11,13 @@ use Illuminate\View\View;
 
 class VentaController extends Controller
 {
-    public function index(VentaService $service): View
+    public function index(IndexVentaRequest $request, VentaService $service): View
     {
-        return view('admin.ventas.index', ['ventas' => $service->paginate()]);
+        return view('admin.ventas.index', [
+            'ventas' => $service->paginate($request->validated()),
+            'filters' => $request->validated(),
+            'sucursales' => $service->availableSucursales(),
+        ]);
     }
 
     public function create(VentaService $service): View
